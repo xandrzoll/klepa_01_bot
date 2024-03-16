@@ -4,4 +4,4 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Привет, Саня! Это будущая заготовка для тг-бота, сделанная на fastapi"}
