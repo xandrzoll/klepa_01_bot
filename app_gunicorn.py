@@ -52,10 +52,11 @@ async def on_startup(bot: Bot) -> None:
     )
 
 async def index(request):
+    logging.info(request)
     return web.Response(text="Welcome home!")
 
 async def print_message(request):
-    print(request)
+    logging.info(request)
     data = {'some': 'data'}
     return web.json_response(data)
 
