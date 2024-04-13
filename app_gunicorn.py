@@ -54,6 +54,11 @@ async def on_startup(bot: Bot) -> None:
 async def index(request):
     return web.Response(text="Welcome home!")
 
+async def print_message(request):
+    print(request)
+    data = {'some': 'data'}
+    return web.json_response(data)
+
 
 async def main() -> web.Application:
     dp = Dispatcher()
@@ -80,4 +85,5 @@ async def main() -> web.Application:
     context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
 
     app.router.add_get('/', index)
+    app.router.add_post('/my_super_message123321', print_message)
     return app
