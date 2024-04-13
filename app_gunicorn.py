@@ -86,5 +86,5 @@ async def main() -> web.Application:
     context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
 
     app.router.add_get('/', index)
-    app.router.add_get('/my_super_message123321', print_message)
+    app.router.add_post('/post_message', print_message)
     return app
