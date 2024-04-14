@@ -55,9 +55,9 @@ async def index(request):
     logging.info(request)
     return web.Response(text="Welcome home!")
 
-async def print_message(request):
-    logging.info(request)
-    data = {'some': 'data'}
+async def print_message(request: web.Request):
+    if request.body_exists:
+        data = await request.json()
     return web.json_response(data)
 
 
