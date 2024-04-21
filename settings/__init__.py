@@ -12,6 +12,7 @@ env.read_env(ENV_PATH)
 # TINKOFF_WATCH_ACCOUNT = env.list('TINKOFF_WATCH_ACCOUNT', subcast=str)
 # TINKOFF_COPY_ACCOUNT = env.list('TINKOFF_COPY_ACCOUNT', subcast=str)
 TG_BOT = env.str('TG_BOT')
+TG_CHAT_ADMIN = env.list('TG_CHAT_ADMIN', subcast=int)
 # TG_CHAT_IDS = env.list('TG_CHAT_IDS', subcast=int)
 #
 # DB_HOST = env.str('DB_HOST')

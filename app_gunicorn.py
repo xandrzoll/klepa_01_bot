@@ -11,8 +11,8 @@ from aiogram.types import FSInputFile, Message
 from aiogram.utils.markdown import hbold
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from settings import (
-    TG_BOT, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV, WEBHOOK_PATH,
-    WEBHOOK_SECRET, BASE_WEBHOOK_URL, SECRET_VALUE
+    TG_BOT, TG_CHAT_ADMIN, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV,
+    WEBHOOK_PATH, WEBHOOK_SECRET, BASE_WEBHOOK_URL, SECRET_VALUE
 )
 from src.webapp.routes.base import require_headers
 
@@ -32,8 +32,6 @@ async def on_startup(bot: Bot) -> None:
 
 router = Router()
 dp = Dispatcher()
-dp.include_router(router)
-dp.startup.register(on_startup)
 bot = Bot(TG_BOT, parse_mode=ParseMode.HTML)
 
 @router.message(CommandStart())
@@ -65,10 +63,15 @@ async def index(request):
 async def print_message(request: web.Request):
     if request.body_exists:
         data = await request.json()
+        message = data.get('message')
+        await bot.send_message(chat_id=TG_CHAT_ADMIN, text=message)
     return web.json_response(data)
 
 
 async def main() -> web.Application:
+    dp.include_router(router)
+    dp.startup.register(on_startup)
+
     app = web.Application()
 
     webhook_requests_handler = SimpleRequestHandler(
