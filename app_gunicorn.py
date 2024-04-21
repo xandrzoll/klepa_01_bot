@@ -14,7 +14,7 @@ from settings import (
     TG_BOT, TG_CHAT_ADMIN, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV,
     WEBHOOK_PATH, WEBHOOK_SECRET, BASE_WEBHOOK_URL, SECRET_VALUE
 )
-from src.webapp.routes.base import require_headers
+from src.webapp.routes.tgbot_messages import send_tg_message
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
@@ -59,14 +59,6 @@ async def index(request):
     logging.info(request)
     return web.Response(text="Welcome home!")
 
-@require_headers({'Content-Type': 'application/json', 'X-Secret-Value': SECRET_VALUE})
-async def print_message(request: web.Request):
-    if request.body_exists:
-        data = await request.json()
-        message = data.get('message')
-        await bot.send_message(chat_id=TG_CHAT_ADMIN[0], text=message)
-    return web.json_response(data)
-
 
 async def main() -> web.Application:
     dp.include_router(router)
@@ -88,5 +80,5 @@ async def main() -> web.Application:
     context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
 
     app.router.add_get('/', index)
-    app.router.add_post('/post_message', print_message)
+    app.router.add_post('/post_message', send_tg_message)
     return app
