@@ -25,11 +25,7 @@ async def send_tg_message(request: web.Request):
         data = await request.json()
         try:
             messages = RequestData(**data)
-            # Проведение дальнейшей обработки, если объект прошел валидацию
-            print("Обработка успешно завершена:", messages)
         except ValidationError as e:
-            # Обработка случая, если входящий объект не прошел валидацию
-            print("Ошибка валидации:", e)
             return web.json_response({"error": f"Ошибка валидации: {e}"})
         for message in messages.data:
             for chat in message.chat:
