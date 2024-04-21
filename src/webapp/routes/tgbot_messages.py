@@ -4,7 +4,7 @@ from typing import List
 
 from settings import SECRET_VALUE
 from src.webapp.routes.base import require_headers
-from app_gunicorn import bot
+from app_gunicorn import send_message
 
 class MessageData(BaseModel):
     message: str
@@ -31,5 +31,5 @@ async def send_tg_message(request: web.Request):
             return web.json_response({"error": f"Ошибка валидации: {e}"})
         for message in messages.data:
             for chat in message.chat:
-                await bot.send_message(chat_id=chat, text=message.message)
+                await send_message(chat_id=chat, text=message.message)
     return web.json_response({"data": "ok!"})
