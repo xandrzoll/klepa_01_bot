@@ -6,11 +6,11 @@ from settings import SECRET_VALUE
 from src.webapp.routes.base import require_headers
 # from app_gunicorn import bot
 
-class MessageData[BaseModel]:
+class MessageData(BaseModel):
     message: str
     chat: List[int]
 
-class RequestData[BaseModel]:
+class RequestData(BaseModel):
     data: List[MessageData]
 
 
@@ -22,8 +22,6 @@ async def send_tg_message(request: web.Request):
     if request.body_exists:
         data = await request.json()
         try:
-            print(data)
-            print(type(data))
             messages = RequestData(**data)
             # Проведение дальнейшей обработки, если объект прошел валидацию
             print("Обработка успешно завершена:", messages)
