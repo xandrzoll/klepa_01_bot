@@ -64,7 +64,7 @@ async def print_message(request: web.Request):
     if request.body_exists:
         data = await request.json()
         message = data.get('message')
-        await bot.send_message(chat_id=TG_CHAT_ADMIN, text=message)
+        await bot.send_message(chat_id=TG_CHAT_ADMIN[0], text=message)
     return web.json_response(data)
 
 
