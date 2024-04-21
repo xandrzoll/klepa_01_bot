@@ -34,9 +34,6 @@ router = Router()
 dp = Dispatcher()
 bot = Bot(TG_BOT, parse_mode=ParseMode.HTML)
 
-async def send_message(chat, message):
-    await bot.send_message(chat_id=chat, text=message)
-
 @router.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
     """
