@@ -14,6 +14,9 @@ class RequestData[BaseModel]:
     data: List[MessageData]
 
 
+routes = web.RouteTableDef()
+
+@routes.post('/post_message')
 @require_headers({'Content-Type': 'application/json', 'X-Secret-Value': SECRET_VALUE})
 async def send_tg_message(request: web.Request):
     if request.body_exists:

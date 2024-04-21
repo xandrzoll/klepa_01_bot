@@ -14,7 +14,7 @@ from settings import (
     TG_BOT, TG_CHAT_ADMIN, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV,
     WEBHOOK_PATH, WEBHOOK_SECRET, BASE_WEBHOOK_URL, SECRET_VALUE
 )
-from src.webapp.routes.tgbot_messages import send_tg_message
+from src.webapp.routes.tgbot_messages import routes
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
@@ -80,5 +80,5 @@ async def main() -> web.Application:
     context.load_cert_chain(WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV)
 
     app.router.add_get('/', index)
-    app.router.add_post('/post_message', send_tg_message)
+    app.add_routes(routes)
     return app
