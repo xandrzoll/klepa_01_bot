@@ -4,7 +4,7 @@ from typing import List
 
 from settings import SECRET_VALUE
 from src.webapp.routes.base import require_headers
-from app_gunicorn import bot
+# from app_gunicorn import bot
 
 class MessageData[BaseModel]:
     message: str
