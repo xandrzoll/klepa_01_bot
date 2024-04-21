@@ -6,7 +6,6 @@ from typing import List
 
 from settings import SECRET_VALUE, TG_BOT
 from src.webapp.routes.base import require_headers
-from app_gunicorn import send_message
 
 class MessageData(BaseModel):
     message: str
