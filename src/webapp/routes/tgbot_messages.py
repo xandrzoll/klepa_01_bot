@@ -21,8 +21,9 @@ routes = web.RouteTableDef()
 async def send_tg_message(request: web.Request):
     if request.body_exists:
         data = await request.json()
-        message = data.get('message')
         try:
+            print(data)
+            print(type(data))
             messages = RequestData(**data)
             # Проведение дальнейшей обработки, если объект прошел валидацию
             print("Обработка успешно завершена:", messages)
