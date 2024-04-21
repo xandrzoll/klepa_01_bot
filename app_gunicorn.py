@@ -12,16 +12,29 @@ from aiogram.utils.markdown import hbold
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from settings import (
     TG_BOT, WEBHOOK_SSL_CERT, WEBHOOK_SSL_PRIV, WEBHOOK_PATH,
-    WEBHOOK_SECRET, BASE_WEBHOOK_URL
+    WEBHOOK_SECRET, BASE_WEBHOOK_URL, SECRET_VALUE
 )
+from src.webapp.routes.base import require_headers
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
 WEB_SERVER_HOST = "127.0.0.1"
 WEB_SERVER_PORT = 8080
 
-router = Router()
 
+async def on_startup(bot: Bot) -> None:
+    await bot.set_webhook(
+        f"{BASE_WEBHOOK_URL}{WEBHOOK_PATH}",
+        certificate=FSInputFile(WEBHOOK_SSL_CERT),
+        secret_token=WEBHOOK_SECRET,
+    )
+
+
+router = Router()
+dp = Dispatcher()
+dp.include_router(router)
+dp.startup.register(on_startup)
+bot = Bot(TG_BOT, parse_mode=ParseMode.HTML)
 
 @router.message(CommandStart())
 async def command_start_handler(message: Message) -> None:
@@ -44,17 +57,11 @@ async def echo_handler(message: types.Message) -> None:
         await message.answer("Nice try!")
 
 
-async def on_startup(bot: Bot) -> None:
-    await bot.set_webhook(
-        f"{BASE_WEBHOOK_URL}{WEBHOOK_PATH}",
-        certificate=FSInputFile(WEBHOOK_SSL_CERT),
-        secret_token=WEBHOOK_SECRET,
-    )
-
 async def index(request):
     logging.info(request)
     return web.Response(text="Welcome home!")
 
+@require_headers({'Content-Type': 'application/json', 'X-Secret-Value': SECRET_VALUE})
 async def print_message(request: web.Request):
     if request.body_exists:
         data = await request.json()
@@ -62,14 +69,6 @@ async def print_message(request: web.Request):
 
 
 async def main() -> web.Application:
-    dp = Dispatcher()
-
-    dp.include_router(router)
-
-    dp.startup.register(on_startup)
-
-    bot = Bot(TG_BOT, parse_mode=ParseMode.HTML)
-
     app = web.Application()
 
     webhook_requests_handler = SimpleRequestHandler(
