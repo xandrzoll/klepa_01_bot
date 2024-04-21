@@ -9,7 +9,7 @@ def require_headers(required_headers):
             for header, expected_value in required_headers.items():
                 actual_value = request.headers.get(header)
                 if actual_value != expected_value:
-                    header_errors.append(f"{header} must be {expected_value}, got {actual_value}")
+                    header_errors.append(f"headers check fall")
 
             if header_errors:
                 return web.Response(status=400, text="; ".join(header_errors))
