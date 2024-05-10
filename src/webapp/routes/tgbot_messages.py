@@ -29,5 +29,6 @@ async def send_tg_message(request: web.Request):
             return web.json_response({"error": f"Ошибка валидации: {e}"})
         for message in messages.data:
             for chat in message.chat:
-                await bot.send_message(chat_id=chat, text=message.message)
+                await bot.send_message(
+                    chat_id=chat, text=message.message, parse_mode='HTML', disable_web_page_preview=True)
     return web.json_response({"data": "ok!"})
